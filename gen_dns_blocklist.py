@@ -6,10 +6,20 @@ import fileinput
 def getdomains():
     result=[]
     for line in fileinput.input():
-        if not line.startswith('0.0.0.0'):
+        if line.startswith('#'):
             continue
-        domain=line.split()[1] # take the domain part
-        result.append(domain)
+        line=line.strip()
+        if len(line)==0:
+            continue
+        if '#' in line:
+            pos=line.find('#')
+            line=line[:pos].strip()
+        if line.startswith('0.0.0.0') or line.startswith('127.0.0.1'):
+            domain=line.split()[1] # take the domain part
+            if domain!="localhost":
+                result.append(domain)
+        else:
+            result.append(line)
     return result
 
 # reduce domain list, removing an entry if there is already another line
@@ -36,6 +46,7 @@ domains=getdomains()
 stage=2
 curlen=len(domains)
 while True:
+    print(f"# stage: {stage}, domains: {curlen}")
     domains=filter(domains,stage)
     newlen=len(domains)
     if newlen>=curlen:
