@@ -1,8 +1,12 @@
 #!/usr/bin/python3
  
-import fileinput
+import fileinput,re
 
 #retrieve all domains in a python list
+#TODO filter out ip addresses
+
+ipv4pat = re.compile(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
+
 def getdomains():
     result=[]
     for line in fileinput.input():
@@ -16,7 +20,7 @@ def getdomains():
             line=line[:pos].strip()
         if line.startswith('0.0.0.0') or line.startswith('127.0.0.1'):
             domain=line.split()[1] # take the domain part
-            if domain!="localhost":
+            if not ipv4pat.match(domain) and domain!="localhost":
                 result.append(domain)
         else:
             result.append(line)
