@@ -1,6 +1,8 @@
 #!/bin/sh
 #update file hosts with blacklist
+#TODO: use mktemp
 cd /tmp
+rm /tmp/*.hosts
 curl -s https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn/hosts -o StevenBlack.hosts &
 curl -s https://someonewhocares.org/hosts/zero/hosts -o someonewhocares.hosts &
 curl -s https://adaway.org/hosts.txt -o adaway.hosts &
@@ -19,3 +21,4 @@ wait
 #grep '^0\.0\.0\.0' /tmp/hosts >> /etc/hosts
 systemctl restart dnsmasq
 rm /tmp/*.hosts
+

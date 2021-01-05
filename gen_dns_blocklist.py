@@ -55,7 +55,7 @@ while True:
     newlen=len(domains)
     if newlen>=curlen:
         break
-    curlen=len(domains)
+    curlen=newlen
     stage+=1
 
 # output the result in dnsmasq format
