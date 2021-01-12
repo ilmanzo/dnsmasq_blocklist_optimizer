@@ -3,6 +3,7 @@
 #TODO: use mktemp
 cd /tmp
 rm /tmp/*.hosts
+curl -s https://dblw.oisd.nl/ -o oisd_nl.hosts & 
 curl -s https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn/hosts -o StevenBlack.hosts &
 curl -s https://someonewhocares.org/hosts/zero/hosts -o someonewhocares.hosts &
 curl -s https://adaway.org/hosts.txt -o adaway.hosts &
