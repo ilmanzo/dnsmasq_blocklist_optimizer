@@ -3,7 +3,7 @@
 #TODO: use mktemp
 cd /tmp
 rm /tmp/*.hosts
-curl -s https://dblw.oisd.nl/ -o oisd_nl.hosts & 
+curl -s https://dbl.oisd.nl/ -o oisd_nl.hosts & 
 curl -s https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn/hosts -o StevenBlack.hosts &
 curl -s https://someonewhocares.org/hosts/zero/hosts -o someonewhocares.hosts &
 curl -s https://adaway.org/hosts.txt -o adaway.hosts &
@@ -15,7 +15,7 @@ curl -s https://v.firebog.net/hosts/neohostsbasic.txt -o neohosts.hosts &
 curl -s https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt -o ransomware-nl.hosts &
 curl -s https://blocklistproject.github.io/Lists/alt-version/gambling-nl.txt -o gambling-nl.hosts &
 curl -s https://phishing.army/download/phishing_army_blocklist_extended.txt -o phishing.hosts & 
-curl -s https://blocklistproject.github.io/Lists/alt-version/youtube-nl.txt -o youtubeads.hosts &
+#curl -s https://blocklistproject.github.io/Lists/alt-version/youtube-nl.txt -o youtubeads.hosts &
 wait
 /usr/local/bin/gen_dns_blocklist.py *.hosts > /etc/dnsmasq.d/blocklist.conf 
 #cp /etc/hosts.original /etc/hosts
