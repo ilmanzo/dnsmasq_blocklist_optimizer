@@ -1,8 +1,13 @@
 #!/bin/sh
 #update file hosts with blacklist
-#TODO: use mktemp
-cd /tmp
-rm /tmp/*.hosts
+
+set -u 
+
+TMPDIR="$(mktemp -d)"
+trap 'rm -rf -- "$TMPDIR"' EXIT
+
+pushd $TMPDIR
+rm $TMPDIR/*.hosts
 curl -s https://dbl.oisd.nl/ -o oisd_nl.hosts & 
 curl -s https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn/hosts -o StevenBlack.hosts &
 curl -s https://someonewhocares.org/hosts/zero/hosts -o someonewhocares.hosts &
@@ -18,8 +23,5 @@ curl -s https://phishing.army/download/phishing_army_blocklist_extended.txt -o p
 #curl -s https://blocklistproject.github.io/Lists/alt-version/youtube-nl.txt -o youtubeads.hosts &
 wait
 /usr/local/bin/gen_dns_blocklist.py *.hosts > /etc/dnsmasq.d/blocklist.conf 
-#cp /etc/hosts.original /etc/hosts
-#grep '^0\.0\.0\.0' /tmp/hosts >> /etc/hosts
 systemctl restart dnsmasq
-rm /tmp/*.hosts
-
+popd
