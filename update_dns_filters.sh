@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #update file hosts with blacklist
 
 set -u 
