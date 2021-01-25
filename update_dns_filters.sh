@@ -2,13 +2,14 @@
 #update file hosts with blacklist
 
 set -u 
+set -e
 
 TMPDIR="$(mktemp -d)"
-trap 'rm -rf -- "$TMPDIR"' EXIT
+#trap 'rm -rf -- "$TMPDIR"' EXIT
 
 pushd $TMPDIR
 rm $TMPDIR/*.hosts
-curl -s https://dbl.oisd.nl/ -o oisd_nl.hosts & 
+curl -s https://hosts.oisd.nl/ -o oisd_nl.hosts & 
 curl -s https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn/hosts -o StevenBlack.hosts &
 curl -s https://someonewhocares.org/hosts/zero/hosts -o someonewhocares.hosts &
 curl -s https://adaway.org/hosts.txt -o adaway.hosts &
