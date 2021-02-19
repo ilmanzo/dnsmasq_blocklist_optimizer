@@ -19,12 +19,13 @@ curl -s https://winhelp2002.mvps.org/hosts.txt -o winhelp2002.hosts &
 curl -s https://v.firebog.net/hosts/static/w3kbl.txt -o fireblog.hosts &
 curl -s https://v.firebog.net/hosts/neohostsbasic.txt -o neohosts.hosts &
 curl -s https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt -o ransomware-nl.hosts &
-#curl -s https://blocklistproject.github.io/Lists/alt-version/gambling-nl.txt -o gambling-nl.hosts &
-#curl -s https://phishing.army/download/phishing_army_blocklist_extended.txt -o phishing.hosts & 
-#curl -s https://block.energized.pro/unified/formats/hosts -o energized.hosts & 
-curl -s https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnsmasq/dnsmasq.blacklist.txt -o /etc/dnsmasq.d/notracking.conf &
+curl -s https://blocklistproject.github.io/Lists/alt-version/gambling-nl.txt -o gambling-nl.hosts &
+curl -s https://phishing.army/download/phishing_army_blocklist_extended.txt -o phishing.hosts & 
+curl -s https://block.energized.pro/unified/formats/hosts -o energized.hosts & 
+#curl -s https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnsmasq/dnsmasq.blacklist.txt -o /etc/dnsmasq.d/notracking.conf &
 wait
-/usr/local/bin/gen_dns_blocklist.py *.hosts > /etc/dnsmasq.d/blocklist.conf 
+#/usr/local/bin/gen_dns_blocklist.py *.hosts > /etc/dnsmasq.d/blocklist.conf 
+/usr/local/bin/gen_dns_blocklist.py *.hosts > /etc/blocked.hosts
 systemctl restart dnsmasq
 popd
 
