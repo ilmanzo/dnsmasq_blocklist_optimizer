@@ -24,7 +24,6 @@ curl -s https://phishing.army/download/phishing_army_blocklist_extended.txt -o p
 curl -s https://block.energized.pro/unified/formats/hosts -o energized.hosts & 
 #curl -s https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnsmasq/dnsmasq.blacklist.txt -o /etc/dnsmasq.d/notracking.conf &
 wait
-#/usr/local/bin/gen_dns_blocklist.py *.hosts > /etc/dnsmasq.d/blocklist.conf 
 /usr/local/bin/gen_dns_blocklist.py *.hosts > /etc/blocked.hosts
 systemctl restart dnsmasq
 popd
