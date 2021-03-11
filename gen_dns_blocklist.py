@@ -5,6 +5,7 @@ import fileinput,re
 
 whitelist=[
     re.compile(r'.*buyon.it$'),
+    re.compile(r'.*survey.alchemer.*$'),
 ]
 
 
