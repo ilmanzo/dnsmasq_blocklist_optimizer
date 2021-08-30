@@ -3,12 +3,14 @@
 import fileinput,re
 
 
+# domains to NOT block (so don't include in list of blocked domains)
 whitelist=[
     re.compile(r'.*buyon.it$'),
     re.compile(r'.*survey.alchemer.*$'),
     re.compile(r'app.simplenote.com$'),
     re.compile(r'concierge.analytics.console.aws.a2z.com$'),
-    re.compile(r'.*target.aws.amazon.com$'),
+    re.compile(r'.*\.aws\..*'),
+    re.compile(r'.+\-\-.+'),
 ]
 
 
