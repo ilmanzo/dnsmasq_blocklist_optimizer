@@ -14,7 +14,7 @@ whitelist=[
 ]
 
 
-#retrieve all domains in a python list
+#retrieve all domains in a python set
 
 ipv4pat = re.compile(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
 
@@ -47,8 +47,8 @@ def matchwl(domain):
     return True
 
 
-# the reduction process is repeated until the list doesn't shrink anymore
 domains=list(filter(matchwl, getdomains()))
+
 # output the result in /etc/hosts format (more performant than dnsmasq)
 domains.sort()
 for b in domains:
