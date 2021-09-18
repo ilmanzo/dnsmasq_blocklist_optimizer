@@ -52,8 +52,7 @@ domains=list(filter(matchwl, getdomains()))
 # output the result in /etc/hosts format (more performant than dnsmasq)
 # add a line like addn-hosts=/etc/blocked.hosts to your dnsmasq.conf
 # where /etc/blocked.hosts is the output of this script
-domains.sort()
+domains.sort(key=len)
 for b in domains:
-    if b.count('.')>1:
-        #print(f"address=/{b}/")
+    if '.' in b:
         print(f"0.0.0.0 {b}")
