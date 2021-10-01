@@ -5,6 +5,7 @@ import fileinput,re
 
 # domains to NOT block (so don't include in list of blocked domains)
 whitelist=[
+    re.compile(r'^wl.spotify.com$'),
     re.compile(r'.*buyon.it$'),
     re.compile(r'.*survey.alchemer.*$'),
     re.compile(r'app.simplenote.com$'),
