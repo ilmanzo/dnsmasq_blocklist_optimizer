@@ -9,7 +9,10 @@ whitelist=[
     re.compile(r'.*buyon.it$'),
     re.compile(r'.*survey.alchemer.*$'),
     re.compile(r'app.simplenote.com$'),
-    re.compile(r'concierge.analytics.console.aws.a2z.com$'),
+    re.compile(r'concierge.analytics.console.aws.a2z.com$'),        #windows update
+    re.compile(r'.*sls.update.microsoft.com.akadns.net$'),          #windows update
+    re.compile(r'.*fe3.delivery.dsp.mp.microsoft.com.nsatc.net$'),  #windows update
+    re.compile(r'.*microsoft.com$'),
     re.compile(r'.*\.aws\..*'),
     re.compile(r'.+\-\-.+'),
 ]
