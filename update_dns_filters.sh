@@ -22,6 +22,9 @@ curl -s https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt -
 curl -s https://blocklistproject.github.io/Lists/alt-version/gambling-nl.txt -o gambling-nl.hosts &
 curl -s https://phishing.army/download/phishing_army_blocklist_extended.txt -o phishing.hosts & 
 curl -s https://block.energized.pro/unified/formats/hosts -o energized.hosts & 
+curl -s https://raw.githubusercontent.com/kboghdady/youTube_ads_4_pi-hole/master/black.list -o youtubeads.hosts &
+curl -s https://justdomains.github.io/blocklists/lists/easylist-justdomains.txt -o justdomains.hosts & 
+
 wait
 /usr/local/bin/gen_dns_blocklist.py *.hosts > /etc/blocked.hosts
 systemctl restart dnsmasq
