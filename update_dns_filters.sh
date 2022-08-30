@@ -8,25 +8,12 @@ TMPDIR="$(mktemp -d)"
 trap 'rm -rf -- "$TMPDIR"' EXIT
 
 pushd $TMPDIR
-#rm $TMPDIR/*.hosts
-curl -s https://hosts.oisd.nl/ -o oisd_nl.hosts & 
-curl -s https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/gambling-porn/hosts -o StevenBlack.hosts &
-curl -s https://someonewhocares.org/hosts/zero/hosts -o someonewhocares.hosts &
-curl -s https://adaway.org/hosts.txt -o adaway.hosts &
-curl -s https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt -o disconnect_me.hosts &
-curl -s https://raw.githubusercontent.com/vokins/yhosts/master/hosts -o vokins.hosts &
-curl -s https://winhelp2002.mvps.org/hosts.txt -o winhelp2002.hosts &
-curl -s https://v.firebog.net/hosts/static/w3kbl.txt -o fireblog.hosts &
-curl -s https://v.firebog.net/hosts/neohostsbasic.txt -o neohosts.hosts &
-curl -s https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt -o ransomware-nl.hosts &
-curl -s https://blocklistproject.github.io/Lists/alt-version/gambling-nl.txt -o gambling-nl.hosts &
-curl -s https://phishing.army/download/phishing_army_blocklist_extended.txt -o phishing.hosts & 
-curl -s https://block.energized.pro/unified/formats/hosts -o energized.hosts & 
-curl -s https://raw.githubusercontent.com/kboghdady/youTube_ads_4_pi-hole/master/black.list -o youtubeads.hosts &
-curl -s https://justdomains.github.io/blocklists/lists/easylist-justdomains.txt -o justdomains.hosts & 
-
-wait
-/usr/local/bin/gen_dns_blocklist.py *.hosts > /etc/blocked.hosts
+# download list of lists to download
+curl https://v.firebog.net/hosts/lists.php?type=tick -o urls.txt
+# gets actual files
+xargs -P 2 -n 1 curl -s -O < urls.txt
+rm urls.txt
+/usr/local/bin/gen_dns_blocklist.py * > /etc/blocked.hosts
 systemctl restart dnsmasq
 popd
 
