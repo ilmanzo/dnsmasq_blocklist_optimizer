@@ -12,6 +12,8 @@ whitelist=[
     re.compile(r'.*microsoft\.com.*'),  
     re.compile(r'.*\.aws\..+'),
     re.compile(r'.+\.googlevideo\.com$'),
+    re.compile(r'^rai-italia.+\.net$'),
+    re.compile(r'^cdn.mateti.net$'),
 ]
 
 blacklist=[
