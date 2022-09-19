@@ -14,6 +14,7 @@ whitelist=[
     re.compile(r'.+\.googlevideo\.com$'),
     re.compile(r'^rai-italia.+\.net$'),
     re.compile(r'^cdn.mateti.net$'),
+    re.compile(r'^imasdk.googleapis.com$'),
 ]
 
 blacklist=[
