@@ -1,15 +1,17 @@
 #!/usr/bin/python3
- 
-import fileinput,re
+
+import fileinput
+import re
 
 # domains to NOT block (so don't include in list of blocked domains)
-whitelist=[
+whitelist = [
     re.compile(r'^wl.spotify\.com$'),
     re.compile(r'.*buyon\.it$'),
     re.compile(r'.*survey.alchemer.*$'),
     re.compile(r'app\.simplenote\.com$'),
-    re.compile(r'concierge\.analytics\.console\.aws\.a2z\.com$'),        #windows update
-    re.compile(r'.*microsoft\.com.*'),  
+    # windows update
+    re.compile(r'concierge\.analytics\.console\.aws\.a2z\.com$'),
+    re.compile(r'.*microsoft\.com.*'),
     re.compile(r'.*\.aws\..+'),
     re.compile(r'.+\.googlevideo\.com$'),
     re.compile(r'^rai-italia.+\.net$'),
@@ -17,36 +19,48 @@ whitelist=[
     re.compile(r'^imasdk.googleapis.com$'),
 ]
 
-blacklist=[
-  re.compile(r'.+registry-app.datadoghq.com$'),
+blacklist = [
+    re.compile(r'.+registry-app.datadoghq.com$'),
 ]
 
-#retrieve all domains in a python set
+# retrieve all domains in a python set
 
 ipv4pat = re.compile(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
 
+
+def bad_address(domain):
+    if '--' in domain:
+        return True
+    if domain.startswith('-') or domain.endswith('-'):
+        return True
+    if '-.' in domain:
+        return True
+    return False
+
+
 def getdomains():
-    result=set()
+    result = set()
     for line in fileinput.input():
-        line=line.strip()
-        if len(line)==0:
+        line = line.strip()
+        if len(line) == 0:
             continue
         if line.startswith('#'):
             continue
         if '#' in line:
-            pos=line.find('#')
-            line=line[:pos].strip()
-        domain=line
+            pos = line.find('#')
+            line = line[:pos].strip()
+        domain = line
         if line.startswith('0.0.0.0 ') or line.startswith('127.0.0.1 '):
-            domain=line.split()[1] # take the domain part
+            # if it has an ip address, take only the domain part
+            domain = line.split()[1]
         if line.startswith('0.0.0.0'):
-            domain=line[7:]
+            domain = line[7:]
         elif line.startswith('127.0.0.1'):
-            domain=line[9:]
-        domain=domain.strip()
-        if '--' in domain or domain.startswith('-') or domain.endswith('-'):
+            domain = line[9:]
+        domain = domain.strip()
+        if bad_address(domain):
             continue
-        if not ipv4pat.match(domain) and domain!="localhost":
+        if not ipv4pat.match(domain) and domain != "localhost":
             result.add(domain)
     return result
 
@@ -57,6 +71,7 @@ def matchbl(domain):
             return True
     return False
 
+
 def matchwl(domain):
     for r in whitelist:
         if r.match(domain):
@@ -65,7 +80,7 @@ def matchwl(domain):
     return True
 
 
-domains=list(filter(matchwl, getdomains()))
+domains = list(filter(matchwl, getdomains()))
 
 # output the result in /etc/hosts format (more performant than dnsmasq)
 # add a line like addn-hosts=/etc/blocked.hosts to your dnsmasq.conf
