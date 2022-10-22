@@ -2,28 +2,19 @@
 
 import fileinput
 import re
+import os
+import sys
+
+
+def get_script_path():
+    return os.path.dirname(os.path.realpath(sys.argv[0]))
+
 
 # domains to NOT block (so don't include in list of blocked domains)
-whitelist = [
-    re.compile(r'^wl.spotify\.com$'),
-    re.compile(r'.*buyon\.it$'),
-    re.compile(r'.*survey.alchemer.*$'),
-    re.compile(r'app\.simplenote\.com$'),
-    # windows update
-    re.compile(r'concierge\.analytics\.console\.aws\.a2z\.com$'),
-    re.compile(r'.*microsoft\.com.*'),
-    re.compile(r'.*\.aws\..+'),
-    re.compile(r'.+\.googlevideo\.com$'),
-    re.compile(r'^rai-italia.+\.net$'),
-    re.compile(r'^cdn.mateti.net$'),
-    re.compile(r'^imasdk.googleapis.com$'),
-]
+with open(os.path.join(get_script_path(), "whitelist.conf"), 'r', encoding='utf-8') as file:
+    whitelist = [re.compile(line.strip())
+                 for line in file.readlines() if not line.startswith("#")]
 
-blacklist = [
-    re.compile(r'.+registry-app.datadoghq.com$'),
-]
-
-# retrieve all domains in a python set
 
 ipv4pat = re.compile(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
 
@@ -36,6 +27,8 @@ def bad_address(domain):
     if '-.' in domain:
         return True
     return False
+
+# retrieve all domains in a python set
 
 
 def getdomains():
@@ -63,13 +56,6 @@ def getdomains():
         if not ipv4pat.match(domain) and domain != "localhost":
             result.add(domain)
     return result
-
-
-def matchbl(domain):
-    for r in blacklist:
-        if r.match(domain):
-            return True
-    return False
 
 
 def matchwl(domain):
