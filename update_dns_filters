@@ -5,7 +5,8 @@ set -u
 #set -e
 
 TMPDIR="$(mktemp -d)"
-#trap 'rm -rf -- "$TMPDIR"' EXIT
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+trap 'rm -rf -- "$TMPDIR"' EXIT
 
 pushd $TMPDIR
 # download list of lists to download
@@ -20,7 +21,7 @@ wait
 # we can dispose tmp list of urls
 rm urls.txt
 # parse and generate blocklist, with filtering and deduplication
-/usr/local/bin/gen_dns_blocklist.py * > /etc/blocked.hosts
-#systemctl restart dnsmasq
+$SCRIPT_DIR/usr/local/bin/gen_dns_blocklist.py * > /etc/blocked.hosts
+systemctl restart dnsmasq
 popd
 
