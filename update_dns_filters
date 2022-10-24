@@ -23,5 +23,5 @@ wait
 rm urls.txt
 # parse and generate blocklist, with filtering and deduplication
 $SCRIPT_DIR/gen_dns_blocklist.py * > /etc/blocked.hosts
-systemctl restart dnsmasq
+systemctl reload dnsmasq
 popd
