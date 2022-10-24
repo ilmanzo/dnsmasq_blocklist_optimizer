@@ -20,11 +20,13 @@ ipv4pat = re.compile(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
 
 
 def bad_address(domain):
-    if '--' in domain:
-        return True
     if domain.startswith('-') or domain.endswith('-'):
         return True
-    if '-.' in domain:
+    if '--' in domain or '-.' in domain:
+        return True
+    if ipv4pat.match(domain):
+        return True
+    if domain == "localhost":
         return True
     return False
 
@@ -51,10 +53,11 @@ def getdomains():
         elif line.startswith('127.0.0.1'):
             domain = line[9:]
         domain = domain.strip()
+        if domain in result:  # if we already excluded it, no point to check again
+            continue
         if bad_address(domain):
             continue
-        if not ipv4pat.match(domain) and domain != "localhost":
-            result.add(domain)
+        result.add(domain)
     return result
 
 
