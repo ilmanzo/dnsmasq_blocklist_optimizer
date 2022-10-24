@@ -11,9 +11,9 @@ trap 'rm -rf -- "$TMPDIR"' EXIT
 
 pushd $TMPDIR
 # download list of lists to download
-wget https://v.firebog.net/hosts/lists.php?type=tick -O urls.txt
+wget -q https://v.firebog.net/hosts/lists.php?type=tick -O urls.txt
 #  gets actual files in parallel (8 transfers at the same time)
-xargs -P 8 --arg-file=urls.txt wget &
+xargs -P 8 --arg-file=urls.txt wget -q &
 # in the meantime download other lists
 wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts &
 wget -q https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt &
