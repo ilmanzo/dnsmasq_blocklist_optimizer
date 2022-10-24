@@ -11,9 +11,9 @@ trap 'rm -rf -- "$TMPDIR"' EXIT
 
 pushd $TMPDIR
 # download list of lists to download
-curl https://v.firebog.net/hosts/lists.php?type=tick -o urls.txt
-#  gets actual files
-wget -q -i urls.txt & 
+wget https://v.firebog.net/hosts/lists.php?type=tick -O urls.txt
+#  gets actual files in parallel (8 transfers at the same time)
+xargs -P 8 --arg-file=urls.txt wget &
 # in the meantime download other lists
 wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts &
 wget -q https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt &
@@ -25,4 +25,3 @@ rm urls.txt
 $SCRIPT_DIR/gen_dns_blocklist.py * > /etc/blocked.hosts
 systemctl restart dnsmasq
 popd
-

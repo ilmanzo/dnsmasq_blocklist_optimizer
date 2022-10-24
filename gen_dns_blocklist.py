@@ -53,7 +53,7 @@ def getdomains():
         elif line.startswith('127.0.0.1'):
             domain = line[9:]
         domain = domain.strip()
-        if domain in result:  # if we already excluded it, no point to check again
+        if domain in result:  # if we already excluded it, no point to check
             continue
         if bad_address(domain):
             continue
