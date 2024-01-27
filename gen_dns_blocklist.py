@@ -30,9 +30,23 @@ def bad_address(domain):
         return True
     return False
 
+def cleanup(line):
+    if '#' in line:
+        pos = line.find('#')
+        line = line[:pos].strip()
+    domain = line
+    if line.startswith('0.0.0.0 ') or line.startswith('127.0.0.1 '):
+        # if it has an ip address, take only the domain part
+        domain = line.split()[1]
+    if line.startswith('0.0.0.0'):
+        domain = line[7:]
+    elif line.startswith('127.0.0.1'):
+        domain = line[9:]
+    domain = domain.strip("|^")
+    return domain
+
+
 # retrieve all domains in a python set
-
-
 def getdomains():
     result = set()
     for line in fileinput.input():
@@ -41,18 +55,7 @@ def getdomains():
             continue
         if line.startswith('#'):
             continue
-        if '#' in line:
-            pos = line.find('#')
-            line = line[:pos].strip()
-        domain = line
-        if line.startswith('0.0.0.0 ') or line.startswith('127.0.0.1 '):
-            # if it has an ip address, take only the domain part
-            domain = line.split()[1]
-        if line.startswith('0.0.0.0'):
-            domain = line[7:]
-        elif line.startswith('127.0.0.1'):
-            domain = line[9:]
-        domain = domain.strip()
+        domain=cleanup(line)
         if domain in result:  # if we already excluded it, no point to check
             continue
         if bad_address(domain):
