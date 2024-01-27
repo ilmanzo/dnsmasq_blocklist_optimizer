@@ -22,9 +22,13 @@ ipv4pat = re.compile(r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}")
 def bad_address(domain):
     if domain.startswith('-') or domain.endswith('-'):
         return True
+    if domain.startswith('|') or domain.endswith('^'):
+        return True
     if '--' in domain or '-.' in domain:
         return True
     if ipv4pat.match(domain):
+        return True
+    if '.' not in domain:
         return True
     if domain == "localhost":
         return True
@@ -79,5 +83,4 @@ domains = list(filter(matchwl, getdomains()))
 # where /etc/blocked.hosts is the output of this script
 domains.sort(key=len)
 for b in domains:
-    if '.' in b:
-        print(f"0.0.0.0 {b}")
+    print(f"0.0.0.0 {b}")
