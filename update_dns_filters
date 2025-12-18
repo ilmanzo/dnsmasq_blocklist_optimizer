@@ -1,26 +1,61 @@
 #!/bin/bash
 #update file hosts with blacklist
 
+set -x
 set -u 
 #set -e
 
 TMPDIR="$(mktemp -d)"
 #SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 SCRIPT_DIR=/home/andrea/projects/dnsmasq_blocklist_optimizer
-trap 'rm -rf -- "$TMPDIR"' EXIT
+#trap 'rm -rf -- "$TMPDIR"' EXIT
 
 pushd $TMPDIR
 # download list of lists to download
-wget -q https://v.firebog.net/hosts/lists.php?type=tick -O urls.txt
+# wget -q https://v.firebog.net/hosts/lists.php?type=tick -O urls.txt
 #  gets actual files in parallel (8 transfers at the same time)
-xargs -P 8 --arg-file=urls.txt wget -q &
+# xargs -P 8 --arg-file=urls.txt wget -q &
 # in the meantime download other lists
 wget -q https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts &
 wget -q https://www.github.developerdan.com/hosts/lists/ads-and-tracking-extended.txt &
-wget -q https://dbl.oisd.nl/ &
+
+# https://firebog.net/
+
+wget -q https://v.firebog.net/hosts/Easyprivacy.txt & 
+wget -q https://v.firebog.net/hosts/Prigent-Ads.txt & 
+wget -q https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.2o7Net/hosts &
+wget -q https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt &
+wget -q https://hostfiles.frogeye.fr/firstparty-trackers-hosts.txt &
+wget -q https://adaway.org/hosts.txt &
+wget -q https://v.firebog.net/hosts/AdguardDNS.txt &
+wget -q https://v.firebog.net/hosts/Admiral.txt &
+wget -q https://raw.githubusercontent.com/anudeepND/blacklist/master/adservers.txt &
+wget -q https://v.firebog.net/hosts/Easylist.txt &
+wget -q https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext &
+wget -q https://raw.githubusercontent.com/FadeMind/hosts.extras/master/UncheckyAds/hosts &
+wget -q https://raw.githubusercontent.com/bigdargon/hostsVN/master/hosts &
+wget -q https://raw.githubusercontent.com/PolishFiltersTeam/KADhosts/master/KADhosts.txt &
+wget -q https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Spam/hosts &
+wget -q https://v.firebog.net/hosts/static/w3kbl.txt &
+wget -q https://raw.githubusercontent.com/matomo-org/referrer-spam-blacklist/master/spammers.txt &
+wget -q https://someonewhocares.org/hosts/zero/hosts &
+wget -q https://raw.githubusercontent.com/RooneyMcNibNug/pihole-stuff/master/SNAFU.txt &
+wget -q https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt &
+wget -q https://v.firebog.net/hosts/Prigent-Crypto.txt &
+wget -q https://raw.githubusercontent.com/FadeMind/hosts.extras/master/add.Risk/hosts &
+wget -q https://phishing.army/download/phishing_army_blocklist_extended.txt &
+wget -q https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-malware.txt &
+wget -q https://raw.githubusercontent.com/Spam404/lists/master/main-blacklist.txt &
+wget -q https://raw.githubusercontent.com/AssoEchap/stalkerware-indicators/master/generated/hosts &
+wget -q https://urlhaus.abuse.ch/downloads/hostfile/ &
+wget -q https://lists.cyberhost.uk/malware.txt &
+wget -q https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/lists/pi_blocklist_porn_top1m.list & 
+wget -q https://v.firebog.net/hosts/Prigent-Adult.txt & 
+wget -q https://raw.githubusercontent.com/anudeepND/blacklist/master/facebook.txt &
+wget -q https://big.oisd.nl/dnsmasq2 -O /etc/dnsmasq.d/bigoids.nl.conf &
 wait
 # we can dispose tmp list of urls
-rm urls.txt
+#rm urls.txt
 # parse and generate blocklist, with filtering and deduplication
 $SCRIPT_DIR/gen_dns_blocklist.py * > /etc/blocked.hosts
 systemctl reload dnsmasq
